@@ -38,8 +38,12 @@
     "prettier": "^3.5.3",
     "tw-animate-css": "^1.3.7",
     "typescript": "^5.7.2",
-    "vite": "^6.3.5",
-    "vitest": "^3.0.5",
+    "vite": "^6.4.6",
+    "vitest": "^5.1.0",
     "web-vitals": "^4.2.4"
+  },
+  "overrides": {
+    "brace-expansion@1": "^1.1.22",
+    "minimatch@>=7.0.0 <11.0.1": "^11.0.8"
   }
 }
