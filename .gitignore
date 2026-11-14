@@ -12,3 +12,4 @@ count.txt
 .deploy.lock
 dist.next
 dist.old
+.env.production

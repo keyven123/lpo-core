@@ -34,10 +34,13 @@ main() {
   NEW_REV="$(git rev-parse HEAD)"
   echo "    $OLD_REV -> $NEW_REV"
 
-  # The API URL is baked into the build. The committed .env.production still points at the old
-  # Hostinger API, so the server must override it in .env.production.local (not tracked by git).
-  if [[ ! -f .env.production.local ]] || ! grep -q '^VITE_API_BASE_URL=https://' .env.production.local; then
-    echo "Set VITE_API_BASE_URL=https://<api-domain>/api/v1 in .env.production.local on the server."
+  # The API URL is baked into the build; refuse to build against localhost by mistake.
+  # It comes from .env.production (or .env.production.local, which wins). Both live only on the server:
+  # they are git-ignored, so the git reset above leaves them alone.
+  local env_files=() f
+  for f in .env.production.local .env.production; do [[ -f $f ]] && env_files+=("$f"); done
+  if [[ ${#env_files[@]} -eq 0 ]] || ! grep -Eq '^[[:space:]]*VITE_API_BASE_URL=["'\'']?https://' "${env_files[@]}"; then
+    echo "Set VITE_API_BASE_URL=https://api.lpoph.com/api/v1 in $APP_DIR/.env.production."
     exit 1
   fi
 
